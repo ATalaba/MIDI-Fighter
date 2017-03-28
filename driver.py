@@ -1,4 +1,4 @@
-import threading, thread
+import threading
 import json
 import sample_player
 import sys
