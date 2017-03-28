@@ -1,4 +1,5 @@
 import alsaaudio 
+import wave
 
 class SamplePlayer:
 
@@ -7,32 +8,31 @@ class SamplePlayer:
 
        
     def play_sample(self, f):    
-
-        print('%d channels, %d sampling rate\n' % (f.getnchannels(),
-                                                   f.getframerate()))
+        samp = wave.open(f, 'rb')
+        
         # Set attributes
-        self.device.setchannels(f.getnchannels())
-        self.device.setrate(f.getframerate())
+        self.device.setchannels(samp.getnchannels())
+        self.device.setrate(samp.getframerate())
 
         # 8bit is unsigned in wav files
-        if f.getsampwidth() == 1:
+        if samp.getsampwidth() == 1:
             self.device.setformat(alsaaudio.PCM_FORMAT_U8)
         # Otherwise we assume signed data, little endian
-        elif f.getsampwidth() == 2:
+        elif samp.getsampwidth() == 2:
             self.device.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-        elif f.getsampwidth() == 3:
+        elif samp.getsampwidth() == 3:
             self.device.setformat(alsaaudio.PCM_FORMAT_S24_LE)
-        elif f.getsampwidth() == 4:
+        elif samp.getsampwidth() == 4:
             self.device.setformat(alsaaudio.PCM_FORMAT_S32_LE)
         else:
             raise ValueError('Unsupported format')
 
-        periodsize = f.getframerate() / 8
+        periodsize = samp.getframerate() / 8
 
         self.device.setperiodsize(periodsize)
         
-        data = f.readframes(periodsize)
+        data = samp.readframes(periodsize)
         while data:
             # Read data from stdin
             self.device.write(data)
-            data = f.readframes(periodsize)
+            data = samp.readframes(periodsize)
