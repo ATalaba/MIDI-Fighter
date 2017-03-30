@@ -7,19 +7,9 @@ import tty
 import os
 import wave
 
+
 with open('mappings.json') as data_file:    
         sample_names = json.load(data_file)
-        sample_mappings = {}
-        for k, v in sample_names.iteritems():
-            sample_mappings[k] = ''
-            samp = wave.open(v, 'rb')
-            periodsize = samp.getframerate()
-            data = samp.readframes(periodsize)
-
-            while data:
-                # Read data from stdin
-                sample_mappings[k] += data
-                data = samp.readframes(periodsize)
 
 def get_ch():
     fd = sys.stdin.fileno()
@@ -37,16 +27,16 @@ def button_listener():
     while True:
         c = get_ch()
 
-        if c in sample_mappings:
+        if c in sample_names:
             file_name = sample_names[c]
-            data = sample_mappings[c]
-            sound_t = threading.Thread(target=sample_player.play_sample, args=(file_name, data))
+            sound_t = threading.Thread(target=sample_player.play_sample, args=(file_name, ))
             sound_t.daemon = True
             sound_t.start()
         elif c.lower() == 'q':
             break
         else:
-            print "invalid command"
+            print("invalid command")
+
 
     os._exit(0)
 
