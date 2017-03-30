@@ -1,0 +1,52 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>MIDI Fighter</title>
+
+		<link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='style.css') }}">
+	</head>
+
+	<body>
+
+		<div class='left'>
+			<h1>MIDI Fighter Configuration</h1>
+			{% for category in categories %}
+				<h3><span class='extend' data-category="{{category}}">+</span> {{ category }}</h3>
+				<ul class='hiddenSound' data-category="{{category}}">
+				{% for sound in categories[category] %}
+					<li>
+						<div class='red' draggable='true' ondragstart="drag(event)" id='sound/{{category}}/{{categories[category][sound]}}'>{{ sound }}</div><br>
+						<audio preload="auto" controls data-soundPlayer='sound/{{category}}/{{categories[category][sound]}}'> 
+		  					<source src='sound/{{category}}/{{categories[category][sound]}}' />
+		  				</audio>
+	  				</li>
+				{% endfor %}
+				</ul> 
+			{% endfor %}
+		</div>
+
+		<div class='right'>
+			<!-- {{ buttonNames }} -->
+			<div id='fighterOutline' class='centerContent'>
+			{% for x in range(0, 4) %}
+				<div class='row'>
+				{% for y in range(0, 4)%}
+					{% for readable in buttons[x|string+y|string] %}
+						<div class='button centerContent' ondrop="drop(event)" ondragover="allowDrop(event)" data-sound='sound/{{buttons[x|string+y|string][readable]}}'>
+							<div class='circle centerContent'>
+								{{ readable }}
+							</div>
+						</div>
+					{% endfor %}
+				{% endfor %}
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="{{ url_for('static',filename='sound.js') }}"></script>
+	<script src="{{ url_for('static',filename='drag.js') }}"></script>
+	
+	</body>
+</html>
