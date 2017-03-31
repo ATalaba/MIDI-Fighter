@@ -67,4 +67,5 @@ body {
 	height: 80%;
 	border: 1px solid black;
 	border-radius: 50%;
+	cursor: pointer;
 }

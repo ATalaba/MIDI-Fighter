@@ -3,12 +3,12 @@ import os
 
 uname = os.uname()
 if uname[0] == 'Linux':
-    audio_lib_name = 'alsaaudio'
+    audio_lib_name = 'pyaudio'
 else: 
     audio_lib_name = 'pyaudio'
 audio_lib = __import__(audio_lib_name)
 
-is_linux = uname[0] == 'Linux'
+is_linux = False
 
 def read(periodsize, i, frames, samp_width):
     return frames[i*periodsize*samp_width:(i+1)*periodsize*samp_width]

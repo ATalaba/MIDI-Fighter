@@ -8,12 +8,15 @@ Samples = "Samples"
 
 @app.route('/')
 def hello():
-	with open('mappings.json') as f:
+	with open('buttons.json') as f:
 		data = json.load(f)
 	buttons = {}
 	for key in data:
-		s = data[key][data[key].index('/') + 1:]
-		buttons[key] = {s.replace('-', ' ')[:s.index('.')]: data[key]}
+		if data[key] != "":
+			s = data[key][data[key].index('/') + 1:]
+			buttons[key] = {s.replace('-', ' ')[:s.index('.')]: data[key]}
+		else:
+			buttons[key] = {"undefined": "undefined"}
 	indexTemplate = {
 		"categories": {f: {s.replace('-', ' ')[:s.index('.')]: s for s in os.listdir(os.path.join("Samples/",f))} 
 						for f in os.listdir("Samples")},
